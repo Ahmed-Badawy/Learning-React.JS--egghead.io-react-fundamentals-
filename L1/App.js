@@ -9,14 +9,17 @@ class App extends React.Component{
 	}
 }
 
-
-App.propTypes = {
+// you can define rules & default values for the passed props:-
+App.propTypes = { 
 	txt: React.PropTypes.string,
-	cat: React.PropTypes.number
+	cat: React.PropTypes.number.isRequired //is required dectates that you must add this prop
 }
 App.defaultProps ={
 	txt: "this is the default txt"
 }
+
+
+
 ReactDOM.render(
 	<App cat={5} txt="Ok This text is from React.JS" /> , 
 	document.getElementById('app')
