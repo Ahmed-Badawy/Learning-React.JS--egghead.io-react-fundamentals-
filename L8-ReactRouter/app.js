@@ -3,35 +3,47 @@ import { render } from 'react-dom'
 import { Router, Route, IndexRoute, Link, hashHistory , browserHistory, Redirect } from 'react-router'
 
 
+
 //Links is the way we render links in our page
-const Links = ()=> 	<div>
-						<div className='alert alert-danger'>
-							<p>what's the differnce between hashHistory & browserHistory ?<br />
-							browserHistory is cleaner in url, but it can't reload the page.</p>
-							<p>you can use activeClassName & activeStyle to indicate which page is currently selected.</p>
-						</div>
-						<Link to="/" className="btn" activeClassName="btn-primary">Home</Link> - &nbsp;
-						<Link to="/about" className="btn" activeClassName="btn-primary">About</Link> - &nbsp; 
-						<Link to="/contact" className="btn" activeClassName="btn-primary">Contact</Link> - &nbsp; 
-						<Link to="/redirectedOldURL" className="btn">Redirect to contact</Link> - &nbsp; 
+class Links extends React.Component {
+	navigate(){ //needs some workarounds to get it to work
+		console.log("navigate");
+		this.props.history.replaceState(null,"/");
+	}
+
+	render(){
+		return <div>
+			<div className='alert alert-danger'>
+				<p>what's the differnce between hashHistory & browserHistory ?<br />
+				browserHistory is cleaner in url, but it can't reload the page.</p>
+				<p>you can use activeClassName & activeStyle to indicate which page is currently selected.</p>
+			</div>
+			<Link to="/" className="btn" activeClassName="btn-primary">Home</Link> - &nbsp;
+			<Link to="/about" className="btn" activeClassName="btn-primary">About</Link> - &nbsp; 
+			<Link to="/contact" className="btn" activeClassName="btn-primary">Contact</Link> - &nbsp; 
+			<Link to="/redirectedOldURL" className="btn">Redirect to contact</Link> - &nbsp; 
+			<button className="btn btn-default btn-xs" onClick={this.navigate.bind(this)} >Function Navigate (doesn't work currently)</button> - &nbsp; 
+
 <br />
-						<Link to="/message/default-message" className="btn" activeClassName="btn-primary">withParams</Link> - &nbsp; 
-						<Link to={ {pathname:'/message2/AhmedBadawy',query:{querystring:'Yo Yo Yo'}} } className="btn" activeClassName="btn-primary">With query String</Link> - &nbsp; 
-						<Link to="/user/bob" activeClassName="active">User: Bob</Link>  - &nbsp; 
-						<Link to={{ pathname: '/user/bob', query: { showAge: true,age:50 } }} activeClassName="active">Bob With Query Params</Link> 
+			<Link to="/message/default-message" className="btn" activeClassName="btn-primary">withParams</Link> - &nbsp; 
+			<Link to={ {pathname:'/message2/AhmedBadawy',query:{querystring:'Yo Yo Yo'}} } className="btn" activeClassName="btn-primary">With query String</Link> - &nbsp; 
+			<Link to="/user/bob" activeClassName="active">User: Bob</Link>  - &nbsp; 
+			<Link to={{ pathname: '/user/bob', query: { showAge: true,age:50 } }} activeClassName="active">Bob With Query Params</Link> 
 <br />
 {/* nested routes: */}
-						<Link to="/grandfather" className="btn" activeStyle={{color:"white","backgroundColor":"#333"}}>GrandFather</Link>   - &nbsp; 
-						<Link to="/grandfather/aunt/" className="btn" activeStyle={{color:"white","backgroundColor":"#333"}}>Aunt</Link>  - &nbsp; 
-						<Link to="/grandfather/father/" className="btn" activeStyle={{color:"white","backgroundColor":"#333"}}>Father</Link>  - &nbsp; 
-						<Link to="/grandfather/father/son/" className="btn" activeStyle={{color:"white","backgroundColor":"#333"}}>Son</Link>  - &nbsp; 
+			<Link to="/grandfather" className="btn" activeStyle={{color:"white","backgroundColor":"#333"}}>GrandFather</Link>   - &nbsp; 
+			<Link to="/grandfather/aunt/" className="btn" activeStyle={{color:"white","backgroundColor":"#333"}}>Aunt</Link>  - &nbsp; 
+			<Link to="/grandfather/father/" className="btn" activeStyle={{color:"white","backgroundColor":"#333"}}>Father</Link>  - &nbsp; 
+			<Link to="/grandfather/father/son/" className="btn" activeStyle={{color:"white","backgroundColor":"#333"}}>Son</Link>  - &nbsp; 
 <br />
 {/* Named Routes*/}
-						<Link to="/container" className="btn" activeClassName="btn-primary">Container</Link>  - &nbsp; 
-						<Link to="/named1" className="btn" activeClassName="btn-primary">Named 1</Link>  - &nbsp; 
-						<Link to="/named2" className="btn" activeClassName="btn-primary">Named 2</Link>  - &nbsp; 
-						<Link to="/named3" className="btn" activeClassName="btn-primary">Named 3</Link>  - &nbsp; 
-					</div>
+			<Link to="/container" className="btn" activeClassName="btn-primary">Container</Link>  - &nbsp; 
+			<Link to="/named1" className="btn" activeClassName="btn-primary">Named 1</Link>  - &nbsp; 
+			<Link to="/named2" className="btn" activeClassName="btn-primary">Named 2</Link>  - &nbsp; 
+			<Link to="/named3" className="btn" activeClassName="btn-primary">Named 3</Link>  - &nbsp; 
+		</div>
+	}
+}
 
 
 
@@ -91,15 +103,19 @@ const Container = (props)=><div>
 
 
 class App extends React.Component{
-	render(){ 	//router contains routes that depends on two attributes (path & component)
-				//both hashHistory & browserHistory can be used here
+	render(){ 
+		//router contains routes that depends on two attributes (path & component)
+		//both hashHistory & browserHistory can be used here
 		return( <Router history={ hashHistory }>
 					<Route path="/" component={Home}></Route>
 					<Route path="/about" component={About}></Route>
 					<Route path="/contact" component={Contact}></Route>
 					<Redirect from="/redirectedOldURL" to='/contact'></Redirect>
 
-{/* passing route params */}					
+{/* 	passing route params 
+		(:praram1) 	with prentacies means optional
+		:param1 	without prentacies means madatory
+*/}					
 					<Route path="/message/(:param1)" component={Message}></Route>
 					<Route path="/message2/(:username)" component={QueryStringCom}></Route>
       				<Route path="user/:userID" component={paramsWithQuery} />
@@ -116,7 +132,6 @@ class App extends React.Component{
 						<Route path="aunt" component={Aunt}></Route>
 					</Route>
 					
-
 {/* named Components: used to enable us to embed multiple component inside one view */}
 					<Route path="container" component={Container}>
 						<Route path="/named1" components={ { header:Links, body:Father } }></Route>

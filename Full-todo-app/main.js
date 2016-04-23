@@ -72,7 +72,7 @@ class TasksCom extends React.Component{
 
 			<form onSubmit={this.add_task}>
 				<div className='col-sm-6'>
-					<input className='form-control' />
+					<input className='form-control' ref='new_text' />
 				</div>
 				<button type='submit' className='btn btn-primary'>Save</button>
 				<button type='reset' className='btn btn-default'>Empty</button>
@@ -89,9 +89,11 @@ class TasksCom extends React.Component{
 	}
 	add_task(e){
 		e.preventDefault();
+		console.log(ReactDOM.findDOMNode(this.refs));
+
 		var new_task_text = this.state.new_task_text;
 		console.log(new_task_text);
-		
+
 		// console.log("adding task");
 		// let new_item = {
 		// 	id: 55,
